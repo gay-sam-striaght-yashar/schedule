@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic HTML Table</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%; /* Adjust the width to your liking */
+            margin: 40px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        caption {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .add-content-button {
+            background-color: green;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% if user %}
+        <p>You are logged in as {{ user }}</p>
+    {% else %}
+        <a href="{{ url_for('login') }}">
+            <button>Login</button>
+        </a>
+    {% endif %}
+
+    <table>
+        <caption>Sample Table</caption>
+        <thead>
+            <tr>
+                <th>Class name</th>
+                <th>Time 1</th>
+                <th>Time 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>class 1</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>class 2</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Date: <span id="tehranDate"></span></p>
+    <p>Time: <span id="tehranTime"></span></p>
+
+    <script>
+        function updateTehranTime() {
+            // Create a Date object for the current time
+            const now = new Date();
+
+            // Define the Tehran timezone
+            const tehranTimezone = 'Asia/Tehran';
+
+            // Get the current date in Tehran
+            const tehranDate = new Intl.DateTimeFormat('en-CA', {
+                timeZone: tehranTimezone,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).format(now);
+
+            // Get the current time in Tehran
+            const tehranTime = new Intl.DateTimeFormat('en-CA', {
+                timeZone: tehranTimezone,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            }).format(now);
+
+            // Update the HTML content with the new date and time
+            document.getElementById('tehranDate').textContent = tehranDate;
+            document.getElementById('tehranTime').textContent = tehranTime;
+        }
+
+        // Update the time immediately on page load
+        updateTehranTime();
+
+        // Set an interval to update the time every second (1000 milliseconds)
+        setInterval(updateTehranTime, 1000);
+
+        // Add green buttons to empty cells
+        document.addEventListener("DOMContentLoaded", function() {
+            const tableCells = document.querySelectorAll('td');
+            tableCells.forEach((cell) => {
+                if (cell.textContent.trim() === '') {
+                    const button = document.createElement('button');
+                    button.textContent = 'Add Content';
+                    button.className = 'add-content-button';
+                    cell.appendChild(button);
+                }
+            });
+
+            var socket = io();
+            console.log('user = {{user}}')
+            socket.emit('join','{{title}}')
+        });
+    </script>
+</body>
+</html>

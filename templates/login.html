@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/bcff51033d.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/all.js') }}"></script>
+    <style>
+        /* Animated Background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Nastaliq Urdu', serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(270deg, #081f37, #5fc9f3, #2e79ba, #1e549f);
+            background-size: 800% 800%;
+            animation: gradientAnimation 3s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Popup Modal Styles */
+    </style>
+</head>
+<body>
+    <div class="animated-background"></div>
+    <section>
+        <a href="{{ url_for('home') }}" id="exit">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+            <button class="back">Return</button>
+        </a>
+        <div class="login">
+            <div class="loginbox">
+                <form action="{{ url_for('checkLogin') }}" method="post" id="login-form">
+                    <h2>Log In</h2>
+                    <div class="inputbox">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <input type="text" required id="username-input" name="name">
+                        <label for="username-input">User name</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input type="password" required id="password-input" name="password">
+                        <label for="password-input">Password</label>
+                    </div>
+                    <input type="submit" value="login" class="submit" id="login-button">
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const inputElements = document.querySelectorAll('input');
+
+        inputElements.forEach(input => {
+            const label = input.nextElementSibling;
+            input.addEventListener('input', () => {
+                if (input.value) {
+                    label.classList.add('input-filled');
+                } else {
+                    label.classList.remove('input-filled');
+                }
+            });
+        });
+    </script>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
